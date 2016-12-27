@@ -1,0 +1,36 @@
+# Git
+*.rej
+*.orig
+*.exe
+*.pyc
+
+# Maven
+target
+
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea
+
+#Node.js
+node
+node_modules
+dist
+npm-debug.log
+
+#Oxygen
+__MACOSX
+
+#OSX
+.DS_Store
+
+#The app
+*.map
+app/src/*.js
+#app/src/**/*.js
+.vagrant/
+typings/
+*.log
+/.vscode/
+/OpenFin/
