@@ -2,7 +2,9 @@ from keras.datasets import mnist # subroutines for fetching the MNIST dataset
 from keras.models import Model # basic class for specifying and training a neural network
 from keras.layers import Input, Dense, Flatten, Convolution2D, MaxPooling2D, Dropout
 from keras.utils import np_utils # utilities for one-hot encoding of ground truth values
+from keras.regularizers import l2 # L2-regularisation
 
+l2_lambda = 0.0001
 batch_size = 128 # in each iteration, we consider 128 training examples at once
 num_epochs = 12 # we iterate twelve times over the entire training set
 kernel_size = 3 # we will use 3x3 kernels throughout
@@ -32,7 +34,7 @@ Y_test = np_utils.to_categorical(y_test, num_classes) # One-hot encode the label
 
 inp = Input(shape=(depth, height, width)) # N.B. Keras expects channel dimension first
 # Conv [32] -> Conv [32] -> Pool (with dropout on the pooling layer)
-conv_1 = Convolution2D(conv_depth, kernel_size, kernel_size, border_mode='same', activation='relu')(inp)
+conv_1 = Convolution2D(conv_depth, kernel_size, kernel_size, border_mode='same', W_regularizer=l2(l2_lambda), activation='relu')(inp)
 conv_2 = Convolution2D(conv_depth, kernel_size, kernel_size, border_mode='same', activation='relu')(conv_1)
 pool_1 = MaxPooling2D(pool_size=(pool_size, pool_size). dim_ordering="th")(conv_2)
 drop_1 = Dropout(drop_prob_1)(pool_1)
