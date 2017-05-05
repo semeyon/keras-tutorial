@@ -4,7 +4,7 @@ from keras.layers import Input, Dense # the two types of neural network layer we
 from keras.utils import np_utils # utilities for one-hot encoding of ground truth values
 
 batch_size = 128 # in each iteration, we consider 128 training examples at once
-num_epochs = 20 # we iterate twenty times over the entire training set
+num_epochs = 200 # we iterate twenty times over the entire training set
 hidden_size = 1024 # there will be 512 neurons in both hidden layers
 
 num_train = 60000 # there are 60000 training examples in MNIST

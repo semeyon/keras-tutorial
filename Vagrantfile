@@ -43,13 +43,13 @@ Vagrant.configure(2) do |config|
   #
   config.vm.provider "parallels" do |vb|
     # Customize the amount of memory on the VM:
-    vb.memory = "4168"
-    vb.cpus   = 4
+    vb.memory = "2024"
+    vb.cpus   = 6
   end
 
   config.vm.provider "virtualbox" do |vb|
     # Customize the amount of memory on the VM:
-    vb.memory = "4168"
+    vb.memory = "2024"
     vb.cpus   = 4
   end
   #
@@ -66,6 +66,6 @@ Vagrant.configure(2) do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  #config.vm.provision "shell",  path: "v-bootstrap.sh"
+  config.vm.provision "shell",  path: "setup_all.sh"
 end
 
