@@ -7,7 +7,7 @@ from keras.layers.normalization import BatchNormalization # batch normalisation
 
 l2_lambda = 0.0001
 batch_size = 128 # in each iteration, we consider 128 training examples at once
-num_epochs = 12 # we iterate twelve times over the entire training set
+num_epochs = 50 # we iterate twelve times over the entire training set
 kernel_size = 3 # we will use 3x3 kernels throughout
 pool_size = 2 # we will use 2x2 pooling throughout
 conv_depth = 32 # use 32 kernels in both convolutional layers
