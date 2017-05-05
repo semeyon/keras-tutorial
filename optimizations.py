@@ -3,6 +3,7 @@ from keras.models import Model # basic class for specifying and training a neura
 from keras.layers import Input, Dense, Flatten, Convolution2D, MaxPooling2D, Dropout
 from keras.utils import np_utils # utilities for one-hot encoding of ground truth values
 from keras.regularizers import l2 # L2-regularisation
+from keras.layers.normalization import BatchNormalization # batch normalisation
 
 l2_lambda = 0.0001
 batch_size = 128 # in each iteration, we consider 128 training examples at once
@@ -32,9 +33,9 @@ X_test /= 255 # Normalise data to [0, 1] range
 Y_train = np_utils.to_categorical(y_train, num_classes) # One-hot encode the labels
 Y_test = np_utils.to_categorical(y_test, num_classes) # One-hot encode the labels
 
-inp = Input(shape=(depth, height, width)) # N.B. Keras expects channel dimension first
-# Conv [32] -> Conv [32] -> Pool (with dropout on the pooling layer)
-conv_1 = Convolution2D(conv_depth, kernel_size, kernel_size, border_mode='same', init='he_uniform', W_regularizer=l2(l2_lambda), activation='relu')(inp)
+inp_norm = BatchNormalization(axis=1)(inp) # apply BN to the input (N.B. need to rename here)
+# conv_1 = Convolution2D(...)(inp_norm)
+conv_1 = BatchNormalization(axis=1)(conv_1) # apply BN to the first conv layer
 conv_2 = Convolution2D(conv_depth, kernel_size, kernel_size, border_mode='same', activation='relu')(conv_1)
 pool_1 = MaxPooling2D(pool_size=(pool_size, pool_size), dim_ordering="th")(conv_2)
 drop_1 = Dropout(drop_prob_1)(pool_1)
