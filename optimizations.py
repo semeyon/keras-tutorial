@@ -34,7 +34,7 @@ inp = Input(shape=(depth, height, width)) # N.B. Keras expects channel dimension
 # Conv [32] -> Conv [32] -> Pool (with dropout on the pooling layer)
 conv_1 = Convolution2D(conv_depth, kernel_size, kernel_size, border_mode='same', activation='relu')(inp)
 conv_2 = Convolution2D(conv_depth, kernel_size, kernel_size, border_mode='same', activation='relu')(conv_1)
-pool_1 = MaxPooling2D(pool_size=(pool_size, pool_size))(conv_2)
+pool_1 = MaxPooling2D(pool_size=(pool_size, pool_size). dim_ordering="th")(conv_2)
 drop_1 = Dropout(drop_prob_1)(pool_1)
 flat = Flatten()(drop_1)
 hidden = Dense(hidden_size, activation='relu')(flat) # Hidden ReLU layer
