@@ -1,3 +1,4 @@
+from keras.layers import merge # for merging predictions in an ensemble
 from keras.datasets import mnist # subroutines for fetching the MNIST dataset
 from keras.models import Model # basic class for specifying and training a neural network
 from keras.layers import Input, Dense, Flatten, Convolution2D, MaxPooling2D, Dropout
@@ -36,15 +37,19 @@ Y_test = np_utils.to_categorical(y_test, num_classes) # One-hot encode the label
 inp = Input(shape=(depth, height, width)) # N.B. Keras expects channel dimension first
 inp_norm = BatchNormalization(axis=1)(inp)
 # Conv [32] -> Conv [32] -> Pool (with dropout on the pooling layer)
-conv_1 = Convolution2D(conv_depth, kernel_size, kernel_size, border_mode='same', init='he_uniform', W_regularizer=l2(l2_lambda), activation='relu')(inp)
-conv_1 = BatchNormalization(axis=1)(conv_1) # apply BN to the first conv layer
-conv_2 = Convolution2D(conv_depth, kernel_size, kernel_size, border_mode='same', activation='relu')(conv_1)
-pool_1 = MaxPooling2D(pool_size=(pool_size, pool_size), dim_ordering="th")(conv_2)
-drop_1 = Dropout(drop_prob_1)(pool_1)
-flat = Flatten()(drop_1)
-hidden = Dense(hidden_size, activation='relu')(flat) # Hidden ReLU layer
-drop = Dropout(drop_prob_2)(hidden)
-out = Dense(num_classes, init='glorot_uniform', W_regularizer=l2(l2_lambda), activation='softmax')(drop)
+outs = []
+for i in range(ens_models):
+    conv_1 = Convolution2D(conv_depth, kernel_size, kernel_size, border_mode='same', init='he_uniform', W_regularizer=l2(l2_lambda), activation='relu')(inp)
+    conv_1 = BatchNormalization(axis=1)(conv_1) # apply BN to the first conv layer
+    conv_2 = Convolution2D(conv_depth, kernel_size, kernel_size, border_mode='same', activation='relu')(conv_1)
+    pool_1 = MaxPooling2D(pool_size=(pool_size, pool_size), dim_ordering="th")(conv_2)
+    drop_1 = Dropout(drop_prob_1)(pool_1)
+    flat = Flatten()(drop_1)
+    hidden = Dense(hidden_size, activation='relu')(flat) # Hidden ReLU layer
+    drop = Dropout(drop_prob_2)(hidden)
+    outs.append(Dense(num_classes, init='glorot_uniform', W_regularizer=l2(l2_lambda), activation='softmax')(drop))
+
+out = merge(outs, mode='ave') # average the predictions to obtain the final output
 
 model = Model(input=inp, output=out) # To define a model, just specify its input and output layers
 
