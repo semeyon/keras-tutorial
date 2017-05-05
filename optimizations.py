@@ -33,8 +33,10 @@ X_test /= 255 # Normalise data to [0, 1] range
 Y_train = np_utils.to_categorical(y_train, num_classes) # One-hot encode the labels
 Y_test = np_utils.to_categorical(y_test, num_classes) # One-hot encode the labels
 
-inp_norm = BatchNormalization(axis=1)(inp) # apply BN to the input (N.B. need to rename here)
-# conv_1 = Convolution2D(...)(inp_norm)
+inp = Input(shape=(depth, height, width)) # N.B. Keras expects channel dimension first
+inp_norm = BatchNormalization(axis=1)(inp)
+# Conv [32] -> Conv [32] -> Pool (with dropout on the pooling layer)
+conv_1 = Convolution2D(conv_depth, kernel_size, kernel_size, border_mode='same', init='he_uniform', W_regularizer=l2(l2_lambda), activation='relu')(inp)
 conv_1 = BatchNormalization(axis=1)(conv_1) # apply BN to the first conv layer
 conv_2 = Convolution2D(conv_depth, kernel_size, kernel_size, border_mode='same', activation='relu')(conv_1)
 pool_1 = MaxPooling2D(pool_size=(pool_size, pool_size), dim_ordering="th")(conv_2)
