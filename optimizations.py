@@ -15,6 +15,7 @@ conv_depth = 32 # use 32 kernels in both convolutional layers
 drop_prob_1 = 0.25 # dropout after pooling with probability 0.25
 drop_prob_2 = 0.5 # dropout in the FC layer with probability 0.5
 hidden_size = 128 # there will be 128 neurons in both hidden layers
+ens_models = 3
 
 num_train = 60000 # there are 60000 training examples in MNIST
 num_test = 10000 # there are 10000 test examples in MNIST
