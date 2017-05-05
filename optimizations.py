@@ -50,7 +50,7 @@ for i in range(ens_models):
     conv_1 = BatchNormalization(axis=1)(conv_1)
     conv_2 = Convolution2D(conv_depth, kernel_size, kernel_size, border_mode='same', init='he_uniform', W_regularizer=l2(l2_lambda), activation='relu')(conv_1)
     conv_2 = BatchNormalization(axis=1)(conv_2)
-    pool_1 = MaxPooling2D(pool_size=(pool_size, pool_size))(conv_2)
+    pool_1 = MaxPooling2D(pool_size=(pool_size, pool_size), dim_ordering="th")(conv_2)
     drop_1 = Dropout(drop_prob_1)(pool_1)
     flat = Flatten()(drop_1)
     hidden = Dense(hidden_size, init='he_uniform', W_regularizer=l2(l2_lambda), activation='relu')(flat) # Hidden ReLU layer
