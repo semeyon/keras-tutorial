@@ -56,3 +56,5 @@ model.fit(X_train, Y_train, # Train the model using the training set...
           batch_size=batch_size, nb_epoch=num_epochs,
           verbose=1, validation_split=0.1) # ...holding out 10% of the data for validation
 model.evaluate(X_test, Y_test, verbose=1) # Evaluate the trained model on the test set!
+
+import gc; gc.collect();
